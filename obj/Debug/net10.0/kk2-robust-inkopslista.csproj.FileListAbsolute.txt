@@ -1,0 +1,4 @@
+C:\Users\thefr\Desktop\kk2-robust-inkopslista\obj\Debug\net10.0\kk2-robust-inkopslista.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\thefr\Desktop\kk2-robust-inkopslista\obj\Debug\net10.0\kk2-robust-inkopslista.AssemblyInfoInputs.cache
+C:\Users\thefr\Desktop\kk2-robust-inkopslista\obj\Debug\net10.0\kk2-robust-inkopslista.AssemblyInfo.cs
+C:\Users\thefr\Desktop\kk2-robust-inkopslista\obj\Debug\net10.0\kk2-robust-inkopslista.csproj.CoreCompileInputs.cache
