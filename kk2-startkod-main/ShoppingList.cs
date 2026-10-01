@@ -15,9 +15,15 @@ class ShoppingList
     }
 
     // Removes the item the user sees as number 1, 2, 3 ...
-    public void RemoveAt(int number)
+    public bool RemoveAt(int number)
     {
+        if (number < 1 || number > items.Count)
+        {
+            return false;
+        }
+
         items.RemoveAt(number - 1);
+        return true;
     }
 
     // Adds up the price of every item on the list.
