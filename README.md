@@ -24,3 +24,14 @@
     {
         return false;
     }
+
+// fel 4: shoppinglist.cs Load()
+// vad är fel: om items.txt inte finns kraschar File.ReadAllText.
+// hur jag lagade: kollar med File.Exists om filen finns först. Finns den inte startar programmet med en tom lista.
+    if (!File.Exists(path))
+    {
+        Console.WriteLine("Ingen sparad lista hittades, startar med en tom lista.");
+        return;
+    }
+
+
