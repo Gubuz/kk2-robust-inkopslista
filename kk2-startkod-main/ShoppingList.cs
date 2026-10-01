@@ -80,7 +80,7 @@ class ShoppingList
         }
         catch (IOException)
         {
-            Console.WriteLine($"Kunde inte spara listan.:");
+            Console.WriteLine($"Kunde inte spara listan.");
         }
         catch (UnauthorizedAccessException)
         {
@@ -104,7 +104,7 @@ class ShoppingList
         }
         catch (IOException)
         {
-            Console.WriteLine($"Kunde inte läsa listan.:");
+            Console.WriteLine($"Kunde inte läsa listan.");
             return;
         }
         catch (UnauthorizedAccessException)
