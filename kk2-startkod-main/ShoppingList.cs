@@ -76,12 +76,16 @@ class ShoppingList
         try
         {
             File.WriteAllText(path, string.Join("\r\n", lines) + "\r\n");
+            Console.WriteLine("Listan är sparad.");
         }
-        catch
+        catch (IOException)
         {
+            Console.WriteLine($"Kunde inte spara listan.:");
         }
-
-        Console.WriteLine("Listan är sparad.");
+        catch (UnauthorizedAccessException)
+        {
+            Console.WriteLine("Programmet har inte behörighet att skriva till filen.");
+        }
     }
 
     // Reads the file back into the list.
@@ -93,13 +97,37 @@ class ShoppingList
             return;
         }
 
-        string text = File.ReadAllText(path);
-        string[] lines = text.Split('\n');
+        string[] lines;
+        try
+        {
+            lines = File.ReadAllLines(path);
+        }
+        catch (IOException)
+        {
+            Console.WriteLine($"Kunde inte läsa listan.:");
+            return;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            Console.WriteLine("Programmet har inte behörighet att läsa filen.");
+            return;
+        }
 
         foreach (string line in lines)
         {
-            string[] parts = line.Split(';');
-            items.Add(new Item(parts[1], int.Parse(parts[0])));
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
+
+            string[] parts = line.Split(';', 2);
+            if (parts.Length < 2 || !int.TryParse(parts[0], out int price))
+            {
+                Console.WriteLine($"Hoppar över felaktig rad: {line}");
+                continue;
+            }
+
+            items.Add(new Item(parts[1], price));
         }
     }
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("kk2-robust-inkopslista")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+14ddd39daf7f0d0cbc38a1e9b88a392919a0904d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+37c2e80f7bee33219ffce56c40534ede5a12a3b2")]
 [assembly: System.Reflection.AssemblyProductAttribute("kk2-robust-inkopslista")]
 [assembly: System.Reflection.AssemblyTitleAttribute("kk2-robust-inkopslista")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
