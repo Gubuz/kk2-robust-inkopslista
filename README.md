@@ -162,3 +162,32 @@ Jag ändrade också "set" till "private set" på Name och Price, så att ingen k
     {
         throw new ArgumentOutOfRangeException(nameof(price), "Priset får inte vara negativt.");
     }
+
+
+    
+    
+    Listan har ett budgettak
+
+Var: "ShoppingList.cs", fälten och konstruktorn
+
+Vad jag ändrade: Jag lade till ett nytt fält "budget" som håller reda på hur dyr listan sammanlagt får bli. Konstruktorn tar nu emot taket som en andra parameter, så man måste bestämma ett tak när man skapar listan. Fältet är "private", så taket kan inte ändras utifrån.
+
+Före:
+
+    private string path;
+
+    public ShoppingList(string path)
+    {
+        this.path = path;
+    }
+
+Efter:
+
+    private string path;
+    private int budget;
+
+    public ShoppingList(string path, int budget)
+    {
+        this.path = path;
+        this.budget = budget;
+    }

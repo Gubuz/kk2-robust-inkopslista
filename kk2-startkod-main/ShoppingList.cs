@@ -3,10 +3,12 @@ class ShoppingList
 {
     private List<Item> items = new List<Item>();
     private string path;
+    private int budget;
 
-    public ShoppingList(string path)
+    public ShoppingList(string path, int budget)
     {
         this.path = path;
+        this.budget = budget;
     }
 
     public void Add(Item item)
