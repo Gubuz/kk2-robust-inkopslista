@@ -136,7 +136,21 @@ class ShoppingList
                 continue;
             }
 
-            items.Add(new Item(parts[1], price));
+            Item item;
+            try
+            {
+                item = new Item(parts[1], price);
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine($"Hoppar över felaktig rad: {line}");
+                continue;
+            }
+
+            if (!Add(item))
+            {
+                Console.WriteLine($"Hoppar över {item.Name}, den får inte plats i budgeten.");
+            }
         }
     }
 }

@@ -1,9 +1,11 @@
-Robust inköpslista – fel jag hittade och lagade
+# Robust inköpslista
+
+# Del 1 – Felrapport
 
 Jag hittade 6 fel i startkoden. För varje fel står det var felet finns, vad som gick fel och vad jag ändrade.
 
 
-Fel 1 – Totalsumman blev fel
+## Fel 1 – Totalsumman blev fel
 
 Var: "ShoppingList.cs", metoden "Total()"
 
@@ -20,7 +22,7 @@ Efter:
     for (int i = 0; i < items.Count; i++)
 
 
-Fel 2 – Programmet kraschade om man skrev bokstäver i stället för en siffra
+## Fel 2 – Programmet kraschade om man skrev bokstäver i stället för en siffra
 
 Var: "Program.cs", menyvalet, priset och numret när man tar bort en vara
 
@@ -41,7 +43,7 @@ Efter:
     }
 
 
-Fel 3 – Programmet kraschade om man tog bort en vara som inte finns
+## Fel 3 – Programmet kraschade om man tog bort en vara som inte finns
 
 Var: "ShoppingList.cs", metoden "RemoveAt()"
 
@@ -63,7 +65,7 @@ Efter:
     }
 
 
-Fel 4 – Programmet kraschade om filen items.txt inte fanns
+## Fel 4 – Programmet kraschade om filen items.txt inte fanns
 
 Var: "ShoppingList.cs", metoden "Load()"
 
@@ -80,7 +82,7 @@ Efter:
     }
 
 
-Fel 5 – Programmet sa "Listan är sparad." fast den inte sparades
+## Fel 5 – Programmet sa "Listan är sparad." fast den inte sparades
 
 Var: "ShoppingList.cs", metoden "Save()"
 
@@ -117,7 +119,7 @@ Efter:
     }
 
 
-Fel 6 – Programmet kraschade på tomma eller felaktiga rader i filen
+## Fel 6 – Programmet kraschade på tomma eller felaktiga rader i filen
 
 Var: "ShoppingList.cs", metoden "Load()"
 
@@ -140,12 +142,10 @@ Efter:
     }
 
 
+# Del 2 – Bygg ut programmet
 
 
-
--- DEL 2
-
-Item skyddar sig själv
+## Item skyddar sig själv
 
 Var: "Item.cs", konstruktorn
 
@@ -164,9 +164,7 @@ Jag ändrade också "set" till "private set" på Name och Price, så att ingen k
     }
 
 
-    
-    
-    Listan har ett budgettak
+## Listan har ett budgettak
 
 Var: "ShoppingList.cs", fälten och konstruktorn
 
@@ -193,7 +191,7 @@ Efter:
     }
 
 
-    Add säger nej om varan spränger taket
+## Add säger nej om varan spränger taket
 
 Var: "ShoppingList.cs", metoden "Add()"
 
@@ -218,3 +216,122 @@ Efter:
         items.Add(item);
         return true;
     }
+
+
+## Program.cs hanterar ogiltiga varor och spräckt tak
+
+Var: "Program.cs", rad 1 och menyval 1 (Lägg till vara)
+
+Vad jag ändrade: På rad 1 skickar jag nu med ett budgettak på 500 kr när listan skapas.
+
+När användaren lägger till en vara skapas den nu inne i en "try". Om namnet är tomt eller priset negativt kastar "Item" ett undantag, som fångas i "catch". Användaren får se felmeddelandet och menyn kommer tillbaka, i stället för att programmet kraschar. Jag fångar "ArgumentException", som också fångar "ArgumentOutOfRangeException" eftersom den ärver från "ArgumentException".
+
+Sedan kontrollerar programmet vad "Add" returnerar. Om det är "false" får användaren veta att varan inte får plats i budgeten.
+
+Före:
+
+    ShoppingList list = new ShoppingList("items.txt");
+
+    list.Add(new Item(name, price));
+
+Efter:
+
+    ShoppingList list = new ShoppingList("items.txt", 500);
+
+    Item item;
+    try
+    {
+        item = new Item(name, price);
+    }
+    catch (ArgumentException ex)
+    {
+        Console.WriteLine(ex.Message);
+        continue;
+    }
+
+    if (!list.Add(item))
+    {
+        Console.WriteLine("Varan får inte plats i budgeten och lades inte till.");
+    }
+
+
+## Load() kraschar inte på ogiltiga varor i filen
+
+Var: "ShoppingList.cs", metoden "Load()"
+
+Vad var fel: Efter att "Item" började kasta undantag kunde programmet krascha direkt när det startade, om "items.txt" innehöll en rad med tomt namn eller negativt pris, till exempel "-5;Mjölk".
+
+Vad jag ändrade: Varan skapas nu inne i en "try". Om "Item" kastar ett undantag hoppas raden över med ett meddelande. Jag använder också "Add" i stället för "items.Add", så att budgettaket gäller även när listan läses in från filen.
+
+Före:
+
+    items.Add(new Item(parts[1], price));
+
+Efter:
+
+    Item item;
+    try
+    {
+        item = new Item(parts[1], price);
+    }
+    catch (ArgumentException)
+    {
+        Console.WriteLine($"Hoppar över felaktig rad: {line}");
+        continue;
+    }
+
+    if (!Add(item))
+    {
+        Console.WriteLine($"Hoppar över {item.Name}, den får inte plats i budgeten.");
+    }
+
+
+# Designval – hur Add säger nej
+
+Jag valde att "Add" returnerar "false" i stället för att kasta ett undantag.
+
+Att taket spräcks är inget fel i programmet. Det är något som kan hända helt normalt när användaren lägger till för mycket, precis som när saldot inte räcker vid ett uttag i ett bankprogram. Anroparen behöver bara få veta om det gick eller inte, och då räcker true eller false.
+
+Undantag använder jag i stället för saker som aldrig borde hända, till exempel ett Item med tomt namn eller negativt pris. Ett sådant objekt är trasigt, och då ska konstruktorn vägra skapa det.
+
+Vad Program.cs gör med svaret: Program.cs kontrollerar vad "Add" returnerar. Om det är "false" skriver programmet ut att varan inte får plats i budgeten, och sedan kommer menyn tillbaka. Det fungerar på samma sätt som "RemoveAt", som också returnerar "false" när numret inte finns.
+
+
+# Klassdiagram
+
+    +----------------+
+    |    Program     |
+    +----------------+
+    | meny           |
+    | try/catch      |
+    +----------------+
+            |
+            v
+    +----------------+
+    |  ShoppingList  |
+    +----------------+
+    | items          |
+    | path           |
+    | budget         |
+    +----------------+
+    | Add()          |
+    | RemoveAt()     |
+    | Total()        |
+    | Find()         |
+    | Print()        |
+    | Save()         |
+    | Load()         |
+    +----------------+
+            |
+            v
+    +----------------+
+    |      Item      |
+    +----------------+
+    | Name           |
+    | Price          |
+    +----------------+
+    | Item()         |
+    | ToString()     |
+    +----------------+
+
+Program använder ShoppingList. ShoppingList har en lista med Item.

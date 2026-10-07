@@ -1,4 +1,4 @@
-ShoppingList list = new ShoppingList("items.txt");
+ShoppingList list = new ShoppingList("items.txt", 500);
 list.Load();
 
 while (true)
@@ -29,7 +29,22 @@ while (true)
             Console.WriteLine("Priset måste vara ett heltal.");
             continue;
         }
-        list.Add(new Item(name, price));
+
+        Item item;
+        try
+        {
+            item = new Item(name, price);
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+            continue;
+        }
+
+        if (!list.Add(item))
+        {
+            Console.WriteLine("Varan får inte plats i budgeten och lades inte till.");
+        }
     }
     else if (choice == 2)
     {
