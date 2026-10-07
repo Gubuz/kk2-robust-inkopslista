@@ -138,3 +138,27 @@ Efter:
         Console.WriteLine($"Hoppar över felaktig rad: {line}");
         continue;
     }
+
+
+
+
+
+-- DEL 2
+
+Item skyddar sig själv
+
+Var: "Item.cs", konstruktorn
+
+Vad jag ändrade: Konstruktorn kontrollerar nu värdena innan de sparas. Om namnet är tomt kastas "ArgumentException". Om priset är negativt kastas "ArgumentOutOfRangeException". Då skapas aldrig ett trasigt Item.
+
+Jag ändrade också "set" till "private set" på Name och Price, så att ingen kan ändra dem utanför klassen och kringgå kontrollen.
+
+    if (string.IsNullOrWhiteSpace(name))
+    {
+        throw new ArgumentException("Namnet får inte vara tomt.");
+    }
+
+    if (price < 0)
+    {
+        throw new ArgumentOutOfRangeException(nameof(price), "Priset får inte vara negativt.");
+    }
