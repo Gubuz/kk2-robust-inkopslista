@@ -191,3 +191,30 @@ Efter:
         this.path = path;
         this.budget = budget;
     }
+
+
+    Add säger nej om varan spränger taket
+
+Var: "ShoppingList.cs", metoden "Add()"
+
+Vad jag ändrade: Innan en vara läggs till kontrollerar "Add" om den nya totalsumman skulle bli större än taket. Om den blir det läggs varan inte till, och metoden returnerar "false". Om varan får plats läggs den till och metoden returnerar "true".
+
+Före:
+
+    public void Add(Item item)
+    {
+        items.Add(item);
+    }
+
+Efter:
+
+    public bool Add(Item item)
+    {
+        if (Total() + item.Price > budget)
+        {
+            return false;
+        }
+
+        items.Add(item);
+        return true;
+    }
